@@ -6,12 +6,13 @@ import (
 	"compress/zlib"
 	"encoding/binary"
 	"fmt"
-	"github.com/pkg/errors"
 	"io"
 	"io/ioutil"
 	"math"
 	"os"
 	"strconv"
+
+	"github.com/pkg/errors"
 )
 
 type PdfReader struct {
@@ -221,8 +222,6 @@ func (this *PdfReader) readToken(r *bufio.Reader) (string, error) {
 		}
 		return str, nil
 	}
-
-	return "", nil
 }
 
 // Read a value based on a token
@@ -387,14 +386,14 @@ func (this *PdfReader) readValue(r *bufio.Reader, t string) (*PdfValue, error) {
 		result.Type = PDF_TYPE_TOKEN
 		result.Token = t
 
-		if is_numeric(t) {
+		if isNumeric(t) {
 			// A numeric token.  Make sure that it is not part of something else
 			t2, err := this.readToken(r)
 			if err != nil {
 				return nil, errors.Wrap(err, "Failed to read token")
 			}
 			if t2 != "" {
-				if is_numeric(t2) {
+				if isNumeric(t2) {
 					// Two numeric tokens in a row.
 					// In this case, we're probably in front of either an object reference
 					// or an object specification.
@@ -738,8 +737,6 @@ func (this *PdfReader) resolveObject(objSpec *PdfValue) (*PdfValue, error) {
 	} else {
 		return objSpec, nil
 	}
-
-	return &PdfValue{}, nil
 }
 
 // Find the xref offset (should be at the end of the PDF)

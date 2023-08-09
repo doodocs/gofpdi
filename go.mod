@@ -1,4 +1,4 @@
-module github.com/vsenko/gofpdi
+module github.com/doodocs/gofpdi
 
 go 1.12
 
